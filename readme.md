@@ -1,5 +1,5 @@
-##B.O.O.T.Y
-####Best Omnipotent Operational Tool for info on Youngsters
+B.O.O.T.Y
+Best Omnipotent Operational Tool for info on Youngsters
 
 
 This API contains information about 20 people. Specifically their names, ages, and favorite games. 
