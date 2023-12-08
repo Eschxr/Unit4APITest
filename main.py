@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import uvicorn
@@ -6,27 +7,32 @@ app = FastAPI()
 
 API_KEYS = ["pnmnyyyyss", "apsicbrthj"]
 
+class Item(BaseModel):
+    name: str
+    age: str
+    favgame: str | None = "bababooey"
+
 data = [
-    {"name": "Samuel Wu", "age": "17", "favorite_game": "potty warriors"},
-    {"name": "Laurence Yang", "age": "18", "favorite_game": "stardew valley"},
-    {"name": "Joe Fernando", "age": "69", "favorite_game": "ET"},
-    {"name": "Sam Xue", "age": "17", "favorite_game": "Oneshot"},
-    {"name": "Jonathan Fernandes", "age": "34", "favorite_game": "Earthbound"},
-    {"name": "Hudson Jones", "age": "16", "favorite_game": "Fortnite"},
-    {"name": "Adriaan Cilliers", "age": "16", "favorite_game": "Single latinas in your area"},
-    {"name": "Plus master", "age": "690", "favorite_game": "man of the chair"},
-    {"name": "joe's nuts", "age": "2", "favorite_game": "nuts journey"},
-    {"name": "josiah fernando", "age": "4", "favorite_game": "boomerang fu"},
-    {"name": "james fernando", "age": "7", "favorite_game": "mario kart"},
-    {"name": "Dumas Bozo", "age": "17", "favorite_game": "samuel wu adventures"},
-    {"name": "Andy Zhang", "age": "18", "favorite_game": "Needy streamer overload"},
-    {"name": "baldr", "age": "37", "favorite_game": "baldur's gate 3"},
-    {"name": "pooper", "age": "42", "favorite_game": "man of the chair"},
-    {"name": "Ben Dover", "age": "19", "favorite_game": "G.A.M.M.A"},
-    {"name": "Harry Wang", "age": "16", "favorite_game": "Harry Potter's amazing adventures"},
-    {"name": "Sarah Fernando", "age": "30", "favorite_game": "secret of the hidden fart room"},
-    {"name": "Barac Obema", "age": "58", "favorite_game": "a mimir"},
-    {"name": "pepe elpepe", "age": "16969", "favorite_game": "elpepe"}
+    Item(name="Samuel Wu", age="17", favgame="potty warriors"),
+    Item(name="Laurence Yang", age="18", favgame="stardew valley"),
+    Item(name="Joe Fernando", age="69", favgame="ET"),
+    Item(name="Sam Xue", age="17", favgame="Oneshot"),
+    Item(name="Jonathan Fernandes", age="34", favgame="Earthbound"),
+    Item(name="Hudson Jones", age="16", favgame="Fortnite"),
+    Item(name="Adriaan Cilliers", age="16", favgame="Single latinas in your area"),
+    Item(name="Plus master", age="690", favgame="man of the chair"),
+    Item(name="joe's nuts", age="2", favgame="nuts journey"),
+    Item(name="josiah fernando", age="4", favgame="boomerang fu"),
+    Item(name="james fernando", age="7", favgame="mario kart"),
+    Item(name="Dumas Bozo", age="17", favgame="samuel wu adventures"),
+    Item(name="Andy Zhang", age="18", favgame="Needy streamer overload"),
+    Item(name="baldr", age="37", favgame="baldur's gate 3"),
+    Item(name="pooper", age="42", favgame="man of the chair"),
+    Item(name="Ben Dover", age="19", favgame="G.A.M.M.A"),
+    Item(name="Harry Wang", age="16", favgame="Harry Potter's amazing adventures"),
+    Item(name="Sarah Fernando", age="30", favgame="secret of the hidden fart room"),
+    Item(name="Barac Obema", age="58", favgame="a mimir"),
+    Item(name="pepe elpepe", age="16969", favgame="elpepe")
 ]
 
 @app.get("/")
@@ -50,9 +56,16 @@ async def get_person(name: str, api_key: str = None):
                 return person
     return "ACCESS DENIED"
 
+@app.post("/names/")
+async def add_person(name: Item, api_key: str = None):
+    if api_key in API_KEYS:
+        data.append(name)
+        return "Action SUCCESSFUL"
+    return "ACCESS DENIED"
+
 @app.get("/funny")
 def funny():
     return RedirectResponse(url="https://tinyurl.com/lawhousehold/")
     
 if __name__ == "__main__":
-    uvicorn.run("main:app", port=6969, log_level="info", reload=True)
+    uvicorn.run("main:app", port=8000, host="0.0.0.0", reload=True)
